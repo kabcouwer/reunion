@@ -56,5 +56,17 @@ RSpec.describe Reunion do
         "Louis" => 40
         })
     end
+
+    it 'can create a summary' do
+      @activity_1.add_participant("Maria", 20)
+      @activity_1.add_participant("Luther", 40)
+      @reunion.add_activity(@activity_1)
+      @activity_2.add_participant("Maria", 60)
+      @activity_2.add_participant("Luther", 60)
+      @activity_2.add_participant("Louis", 0)
+      @reunion.add_activity(@activity_2)
+
+      expect(@reunion.summary).to eq("Maria: -10\nLuther: -30\nLouis: 40")
+    end
   end
 end

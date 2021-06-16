@@ -18,15 +18,33 @@ class Reunion
   end
 
   def breakout
-    breakout_hash = Hash.new(0)
-    array_of_hashes = @activities.map do |activity|
-      activity.owed
-    end
-    breakout = array_of_hashes.flat_map do |hash|
-      hash.each_with_object(breakout_hash) do |(person, cost), hash|
-        hash[person] += cost
+    breakout_hash = Hash.new{ |hash, key| hash[key] = 0 }
+    @activities.each do |activity|
+      activity.owed.each do |person, cost|
+        breakout_hash[person] += cost
       end
     end
-    breakout[0]
+    breakout_hash
+  end
+
+
+# array_of_hashes = @activities.map do |activity|
+#   activity.owed
+# end
+# breakout = array_of_hashes.flat_map do |hash|
+#   hash.each_with_object(breakout_hash) do |(person, cost), hash|
+#     hash[person] += cost
+#   end
+# end
+# breakout[0]
+  def summary
+    string = ''
+    sum_array = breakout.sort_by do |person, cost|
+      person
+    end.reverse
+    sum_array.each do |array|
+      string << (array[0] + ': ' + array[1].to_s + "\n")
+    end
+    string.chop
   end
 end
